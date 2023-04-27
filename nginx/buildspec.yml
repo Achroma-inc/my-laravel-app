@@ -3,6 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 572098559983.dkr.ecr.ap-northeast-1.amazonaws.com
@@ -26,12 +27,14 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - docker push $REPOSITORY_URI:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"nginx","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imagedefinitions.json
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imageDetail.json
       - ls -l $CODEBUILD_SRC_DIR
 
 artifacts:
   files:
-    - imagedefinitions.json
+    - imageDetail.json
+    - taskdef.json
+    - appspec.yml
 
 cache:
   paths:
