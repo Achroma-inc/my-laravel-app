@@ -37,7 +37,7 @@
         },
         {
             "name": "php",
-            "image": "IMAGE_PHP",
+            "image": "<IMAGE_PHP>",
             "portMappings": [
                 {
                     "name": "php-9000-tcp",
